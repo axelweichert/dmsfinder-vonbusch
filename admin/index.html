@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DMS Finder — Admin</title>
+<style>
+@font-face{font-family:'NNG';src:url('/VER3-Non-NaturalGrotesk-Inktrap-Regular-244omp_1.otf') format('opentype');font-weight:400;font-display:swap}
+@font-face{font-family:'NNG';src:url('/VER3-Non-Natural-Grotesk-Inktrap-Medium-zg7hp4_1.otf') format('opentype');font-weight:500;font-display:swap}
+@font-face{font-family:'NNG';src:url('/VER3-NonNatural-Grotesk-Inktrap-Bold-qpvg5h_1.otf') format('opentype');font-weight:700;font-display:swap}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --teal:#00C2A8;--cyan:#00C2FF;
+  --dark:#0A1628;--dark2:#0F2044;--gray:#1E3050;
+  --text:#E8EFF8;--text2:#8BA5C4;--white:#fff;
+  --card:rgba(255,255,255,0.04);--brd:rgba(0,194,168,0.15);
+}
+
+body{font-family:'NNG',system-ui,sans-serif;font-size:14px;color:var(--text);background:var(--dark);min-height:100vh}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--dark2);border-bottom:1px solid var(--brd);padding:0 24px;display:flex;align-items:center;height:56px;gap:20px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-weight:700;font-size:16px;color:var(--white)}
+.topbar-logo span{color:var(--teal)}
+.topbar-right{margin-left:auto;display:flex;gap:12px;align-items:center}
+.badge-neu{background:rgba(0,194,168,0.15);border:1px solid rgba(0,194,168,0.3);border-radius:12px;padding:3px 10px;font-size:12px;font-weight:700;color:var(--teal)}
+.btn-export{background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text2);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;transition:all .2s}
+.btn-export:hover{border-color:var(--teal);color:var(--teal)}
+.btn-home{background:transparent;border:none;color:var(--text2);padding:6px 14px;cursor:pointer;font-size:13px;font-family:inherit;text-decoration:none;transition:color .2s}
+.btn-home:hover{color:var(--white)}
+
+/* ── LAYOUT ── */
+.layout{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 56px)}
+
+/* ── SIDEBAR / LIST ── */
+.sidebar{background:var(--dark2);border-right:1px solid rgba(255,255,255,0.06);overflow-y:auto}
+.sidebar-head{padding:16px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.sidebar-head h2{font-size:15px;font-weight:700;color:var(--white);margin-bottom:10px}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.filter-tab{padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s}
+.filter-tab:hover,.filter-tab.active{background:rgba(0,194,168,0.12);border-color:var(--teal);color:var(--teal)}
+
+.lead-list{display:flex;flex-direction:column}
+.lead-item{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.04);cursor:pointer;transition:background .15s;display:flex;flex-direction:column;gap:4px}
+.lead-item:hover{background:rgba(255,255,255,0.03)}
+.lead-item.active{background:rgba(0,194,168,0.08);border-left:3px solid var(--teal)}
+.lead-item-name{font-weight:600;font-size:14px;color:var(--white);display:flex;align-items:center;gap:8px}
+.lead-item-company{font-size:12px;color:var(--text2)}
+.lead-item-meta{display:flex;gap:8px;align-items:center}
+.lead-item-date{font-size:11px;color:var(--text2)}
+.status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-neu{background:#00C2A8}.dot-bearbeitet{background:#F5A623}.dot-gewonnen{background:#27AE60}.dot-verloren{background:#E74C3C}
+.lead-item-score{font-size:11px;color:var(--text2);background:rgba(255,255,255,0.06);border-radius:6px;padding:1px 6px;margin-left:auto}
+.empty-list{padding:40px 20px;text-align:center;color:var(--text2);font-size:14px}
+
+/* ── DETAIL PANEL ── */
+.detail{padding:24px;overflow-y:auto}
+.detail-placeholder{display:flex;align-items:center;justify-content:center;height:100%;color:var(--text2);font-size:15px}
+.detail-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;gap:16px}
+.detail-title{font-size:20px;font-weight:700;color:var(--white)}
+.detail-company{font-size:14px;color:var(--text2);margin-top:4px}
+.detail-badges{display:flex;gap:8px;flex-wrap:wrap}
+.status-select{background:rgba(0,194,168,0.1);border:1px solid rgba(0,194,168,0.3);border-radius:8px;color:var(--teal);padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.status-select option{background:var(--dark2);color:var(--text)}
+.convert-btn{background:linear-gradient(135deg,#00C2A8,#00C2FF);border:none;color:var(--white);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;transition:opacity .2s}
+.convert-btn:hover{opacity:.85}
+.convert-btn:disabled{opacity:.4;cursor:not-allowed}
+
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.detail-section{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:16px}
+.detail-section-full{grid-column:span 2}
+.detail-section h3{font-size:12px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.detail-field{display:flex;flex-direction:column;gap:3px;margin-bottom:10px}
+.detail-field:last-child{margin-bottom:0}
+.field-label{font-size:11px;color:var(--text2)}
+.field-val{font-size:14px;color:var(--white)}
+.field-val.empty{color:var(--text2);font-style:italic}
+
+/* Score bar */
+.score-bar-wrap{margin-top:8px}
+.score-bar-track{height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;margin-top:4px}
+.score-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#00C2A8,#00C2FF)}
+
+/* Quiz answers */
+.quiz-answers{display:flex;flex-direction:column;gap:8px}
+.quiz-row{display:flex;flex-direction:column;gap:2px}
+.quiz-q{font-size:11px;color:var(--text2)}
+.quiz-a{font-size:13px;color:var(--white);padding-left:8px;border-left:2px solid rgba(0,194,168,0.3)}
+
+/* Notes */
+.notes-area{width:100%;background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--white);font-size:14px;font-family:inherit;padding:10px 12px;resize:vertical;min-height:80px;outline:none;transition:border-color .2s}
+.notes-area:focus{border-color:var(--teal)}
+.save-btn{background:transparent;border:1px solid rgba(0,194,168,0.3);color:var(--teal);padding:7px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;margin-top:8px;transition:all .2s}
+.save-btn:hover{background:rgba(0,194,168,0.1)}
+
+/* KPI bar */
+.kpi-bar{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.kpi-card{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:14px 20px;flex:1;min-width:120px}
+.kpi-num{font-size:24px;font-weight:700;color:var(--teal)}
+.kpi-label{font-size:11px;color:var(--text2);margin-top:2px}
+
+@media(max-width:800px){
+  .layout{grid-template-columns:1fr}
+  .detail{display:none}
+  .detail.mobile-show{display:block}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">DMS<span>Finder</span> — Admin</div>
+  <div class="topbar-right">
+    <span class="badge-neu" id="neuCount">… Neu</span>
+    <button class="btn-export" onclick="exportCSV()">⬇ CSV Export</button>
+    <a href="/" class="btn-home">← Landing Page</a>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- ── LEAD LIST ── -->
+  <div class="sidebar">
+    <div class="sidebar-head">
+      <h2>Lead-Anfragen</h2>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="loadLeads('')">Alle</button>
+        <button class="filter-tab" onclick="loadLeads('neu')">Neu</button>
+        <button class="filter-tab" onclick="loadLeads('bearbeitet')">Bearbeitet</button>
+        <button class="filter-tab" onclick="loadLeads('gewonnen')">Gewonnen</button>
+        <button class="filter-tab" onclick="loadLeads('verloren')">Verloren</button>
+      </div>
+    </div>
+    <div class="lead-list" id="leadList"><div class="empty-list">Wird geladen…</div></div>
+  </div>
+
+  <!-- ── DETAIL ── -->
+  <div class="detail" id="detailPanel">
+    <div class="detail-placeholder">← Lead auswählen</div>
+  </div>
+</div>
+
+<script>
+let allLeads = [];
+let currentStatus = '';
+let currentLead = null;
+
+const INTEREST_LABELS = {
+  docuware: 'DocuWare DMS',
+  jobrouter: 'JobRouter Workflow',
+  beide: 'DocuWare + JobRouter',
+  beratung: 'Unverbindliche Beratung'
+};
+
+const STATUS_LABELS = {
+  neu: '🟢 Neu',
+  bearbeitet: '🟡 Bearbeitet',
+  gewonnen: '✅ Gewonnen',
+  verloren: '❌ Verloren'
+};
+
+const QUIZ_LABELS = [
+  'Digitale Arbeitsplätze',
+  'Dokumentenverwaltung',
+  'Team-Zusammenarbeit',
+  'Prozessautomatisierung',
+  'Compliance & Archivierung',
+  'Unternehmensgröße'
+];
+
+async function api(path, opts = {}) {
+  const r = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...opts });
+  return r.json();
+}
+
+async function loadLeads(status) {
+  currentStatus = status;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const url = '/api/admin/leads' + (status ? '?status=' + status : '');
+  const data = await api(url);
+  allLeads = data.leads || [];
+
+  const neuCount = allLeads.filter(l => l.status === 'neu').length;
+  document.getElementById('neuCount').textContent = neuCount + ' Neu';
+
+  renderList();
+}
+
+function renderList() {
+  const el = document.getElementById('leadList');
+  if (!allLeads.length) {
+    el.innerHTML = '<div class="empty-list">Keine Leads gefunden</div>';
+    return;
+  }
+  el.innerHTML = allLeads.map(l => {
+    const dot = 'dot-' + l.status;
+    const scoreLabel = l.score_total >= 36 ? '🏆' : l.score_total >= 29 ? '🚀' : l.score_total >= 15 ? '📈' : '💡';
+    return `
+    <div class="lead-item${currentLead?.id === l.id ? ' active' : ''}" onclick="openLead(${l.id})">
+      <div class="lead-item-name">
+        <div class="status-dot ${dot}"></div>
+        ${esc(l.name)}
+        <span class="lead-item-score">${scoreLabel} ${l.score_total || 0}/42</span>
+      </div>
+      <div class="lead-item-company">${esc(l.company || '—')}</div>
+      <div class="lead-item-meta">
+        <span class="lead-item-date">${fmtDate(l.created_at)}</span>
+        ${l.dms_interest ? `<span style="font-size:11px;color:var(--text2)">· ${INTEREST_LABELS[l.dms_interest] || l.dms_interest}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function openLead(id) {
+  currentLead = allLeads.find(l => l.id === id);
+  if (!currentLead) return;
+  renderList();
+  renderDetail(currentLead);
+}
+
+function renderDetail(l) {
+  const dp = document.getElementById('detailPanel');
+  const scoreLabel =
+    l.score_total >= 36 ? 'Digital Champion 🏆' :
+    l.score_total >= 29 ? 'Vorreiter 🚀' :
+    l.score_total >= 15 ? 'Fortgeschritten 📈' : 'Einsteiger 💡';
+  const scorePct = Math.round((l.score_total / 42) * 100);
+
+  dp.innerHTML = `
+    <div class="kpi-bar">
+      <div class="kpi-card"><div class="kpi-num">${l.score_total || 0}/42</div><div class="kpi-label">Digitalisierungs-Score</div></div>
+      <div class="kpi-card"><div class="kpi-num">${INTEREST_LABELS[l.dms_interest] || l.dms_interest || '–'}</div><div class="kpi-label">Produktinteresse</div></div>
+      <div class="kpi-card"><div class="kpi-num">${l.employees || '–'}</div><div class="kpi-label">Mitarbeiter</div></div>
+    </div>
+
+    <div class="detail-header">
+      <div>
+        <div class="detail-title">${esc(l.name)}</div>
+        <div class="detail-company">${esc(l.company || '—')} ${l.position ? '· ' + esc(l.position) : ''}</div>
+      </div>
+      <div class="detail-badges">
+        <select class="status-select" id="statusSel" onchange="updateStatus(${l.id},this.value)">
+          <option value="neu"${l.status==='neu'?' selected':''}>🟢 Neu</option>
+          <option value="bearbeitet"${l.status==='bearbeitet'?' selected':''}>🟡 Bearbeitet</option>
+          <option value="gewonnen"${l.status==='gewonnen'?' selected':''}>✅ Gewonnen</option>
+          <option value="verloren"${l.status==='verloren'?' selected':''}>❌ Verloren</option>
+        </select>
+        <button class="convert-btn" id="convertBtn" onclick="convertLead(${l.id})">→ In CRM übertragen</button>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-section">
+        <h3>Kontakt</h3>
+        <div class="detail-field"><div class="field-label">Name</div><div class="field-val">${esc(l.name)}</div></div>
+        <div class="detail-field"><div class="field-label">E-Mail</div><div class="field-val"><a href="mailto:${esc(l.email)}" style="color:var(--teal)">${esc(l.email)}</a></div></div>
+        <div class="detail-field"><div class="field-label">Telefon</div><div class="field-val ${!l.phone?'empty':''}">${esc(l.phone) || 'nicht angegeben'}</div></div>
+        <div class="detail-field"><div class="field-label">Position</div><div class="field-val ${!l.position?'empty':''}">${esc(l.position) || 'nicht angegeben'}</div></div>
+        <div class="detail-field"><div class="field-label">Eingegangen</div><div class="field-val">${fmtDate(l.created_at)}</div></div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Unternehmen</h3>
+        <div class="detail-field"><div class="field-label">Firma</div><div class="field-val">${esc(l.company) || '—'}</div></div>
+        <div class="detail-field"><div class="field-label">Mitarbeiter</div><div class="field-val ${!l.employees?'empty':''}">${esc(l.employees) || 'nicht angegeben'}</div></div>
+        <div class="detail-field"><div class="field-label">Branche</div><div class="field-val ${!l.branche?'empty':''}">${esc(l.branche) || 'nicht angegeben'}</div></div>
+        <div class="detail-field"><div class="field-label">Aktuelle Lösung</div><div class="field-val ${!l.current_system?'empty':''}">${esc(l.current_system) || 'nicht angegeben'}</div></div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Projektdetails</h3>
+        <div class="detail-field"><div class="field-label">Interesse</div><div class="field-val">${INTEREST_LABELS[l.dms_interest] || l.dms_interest || '—'}</div></div>
+        <div class="detail-field"><div class="field-label">Budget</div><div class="field-val ${!l.budget?'empty':''}">${esc(l.budget) || 'nicht angegeben'}</div></div>
+        <div class="detail-field"><div class="field-label">Zeitrahmen</div><div class="field-val ${!l.timeline?'empty':''}">${esc(l.timeline) || 'nicht angegeben'}</div></div>
+        ${l.message ? `<div class="detail-field"><div class="field-label">Nachricht</div><div class="field-val" style="white-space:pre-wrap;font-size:13px">${esc(l.message)}</div></div>` : ''}
+      </div>
+
+      <div class="detail-section">
+        <h3>Digitalisierungs-Score</h3>
+        <div class="detail-field"><div class="field-label">Ergebnis</div><div class="field-val">${l.score_total || 0}/42 — ${scoreLabel}</div></div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:${scorePct}%"></div></div>
+        </div>
+      </div>
+
+      <div class="detail-section detail-section-full">
+        <h3>Quiz-Antworten</h3>
+        <div class="quiz-answers">
+          ${[0,1,2,3,4,5].map(i => {
+            const ans = l['q'+(i+1)+'_answer'];
+            return `<div class="quiz-row">
+              <div class="quiz-q">${QUIZ_LABELS[i]}</div>
+              <div class="quiz-a ${!ans?'empty':''}">${ans || 'nicht beantwortet'}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <div class="detail-section detail-section-full">
+        <h3>Notizen</h3>
+        <textarea class="notes-area" id="notesArea" placeholder="Interne Notizen zum Lead…">${esc(l.notes || '')}</textarea>
+        <button class="save-btn" onclick="saveNotes(${l.id})">Notiz speichern</button>
+      </div>
+    </div>
+  `;
+}
+
+async function updateStatus(id, status) {
+  await api('/api/admin/leads/' + id, { method: 'PATCH', body: JSON.stringify({ status }) });
+  const lead = allLeads.find(l => l.id === id);
+  if (lead) { lead.status = status; currentLead = lead; }
+  renderList();
+}
+
+async function saveNotes(id) {
+  const notes = document.getElementById('notesArea').value;
+  await api('/api/admin/leads/' + id, { method: 'PATCH', body: JSON.stringify({ notes }) });
+  const lead = allLeads.find(l => l.id === id);
+  if (lead) lead.notes = notes;
+  const btn = document.querySelector('.save-btn');
+  if (btn) { btn.textContent = '✓ Gespeichert'; setTimeout(() => btn.textContent = 'Notiz speichern', 2000); }
+}
+
+async function convertLead(id) {
+  const btn = document.getElementById('convertBtn');
+  if (!confirm('Lead in das vonBusch CRM übertragen? Es wird eine Firma, ein Kontakt und eine Lead-Aktivität angelegt.')) return;
+  btn.disabled = true;
+  btn.textContent = 'Wird übertragen…';
+  try {
+    const r = await api('/api/admin/leads/' + id + '/convert', { method: 'POST' });
+    if (r.success) {
+      btn.textContent = '✓ Übertragen!';
+      btn.style.background = '#27AE60';
+      await updateStatus(id, 'bearbeitet');
+    } else {
+      alert('Fehler: ' + (r.error || 'Unbekannt'));
+      btn.disabled = false;
+      btn.textContent = '→ In CRM übertragen';
+    }
+  } catch(e) {
+    alert('Verbindungsfehler: ' + e.message);
+    btn.disabled = false;
+    btn.textContent = '→ In CRM übertragen';
+  }
+}
+
+function exportCSV() {
+  window.location.href = '/api/admin/export';
+}
+
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' })
+       + ' ' + d.toLocaleTimeString('de-DE', { hour:'2-digit', minute:'2-digit' });
+}
+
+// Init
+loadLeads('');
+</script>
+</body>
+</html>
