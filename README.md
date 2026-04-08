@@ -30,8 +30,12 @@ dms-finder/
 
 ## Design & Branding
 
-- **Farben:** Teal/Cyan Gradient (`#00C2A8 → #00C2FF`)
-- **Schriftart:** Non-Natural Grotesk Inktrap (lokal, kein Google Fonts)
+- **Optik:** identisch zu zt-shield.vonbusch.app (gleiche Design-Sprache)
+- **Akzentfarbe:** Lila `#7B5EA7` → `#A07CC5` (Gradient)
+- **Dark/Light Mode:** Toggle-Button (🌙/☀️), `localStorage` persistiert, `data-theme` Attribut
+- **Schriftart:** Non-Natural Grotesk Inktrap — Regular/Medium/Bold — als Base64 inline in `index.html` eingebettet (kein externes Laden)
+- **Logo:** von Busch GmbH oben links im Nav, als Base64 eingebettet
+- **Grid-Hintergrund:** nur im Dark Mode aktiv (identisch zu zt-shield)
 - **Produkte:** DocuWare DMS + JobRouter Workflow
 - **Responsive:** Vollständig mobil-optimiert
 
@@ -287,6 +291,14 @@ CRM-Ansicht: **Marketing → Lead Magneten → DMS Finder**
 ---
 
 ## CHANGELOG
+
+### v1.0.1 — 2026-04-08
+- Design-Übernahme von zt-shield.vonbusch.app
+- Akzentfarbe: Lila `#7B5EA7` (vorher Teal `#00C2A8`)
+- Fonts: NNG Regular/Medium/Bold als Base64 direkt in `index.html` eingebettet
+- Logo: von Busch GmbH oben links im Nav, Base64-eingebettet
+- Dark/Light Mode: Toggle-Button (🌙/☀️), `localStorage`, `data-theme`-Attribut
+- Admin: Akzentfarbe ebenfalls auf Lila aktualisiert (war noch Teal/Cyan)
 
 ### v1.0.0 — 2026-04-08
 - Initiales Release
