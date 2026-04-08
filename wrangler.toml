@@ -1,56 +1,18 @@
-name = "vonbuschos-cloud-crm"
-main = "src/index.ts"
-compatibility_date = "2024-09-23"
+name = "dms-finder"
+main = "worker.js"
+compatibility_date = "2026-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-[placement]
-mode = "smart"
+account_id = "6d2a1d5945f8b63047a1d59a9f94de21"
 
 [assets]
-directory = "./public"
+directory = "."
 binding = "ASSETS"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "vonbusch-crm"
-database_id = "da1d7413-7552-41c2-986d-e1ab43de972d"
-migrations_dir = "migrations"
+database_name = "dms-finder-db"
+database_id = "518eeaa0-7f27-4bc8-a8bf-2f38ef6a9640"
 
-[[d1_databases]]
-binding = "DB_STAGING"
-database_name = "vonbusch-crm-staging"
-database_id = "6f637732-a73a-4f8f-a536-b1c1a7a81714"
-
-[[d1_databases]]
-binding = "DB_TEST"
-database_name = "vonbusch-crm-test"
-database_id = "afd28b62-7153-49a4-8afb-ddc5f6d29dbf"
-
-[[d1_databases]]
-binding = "ZT_SHIELD_DB"
-database_name = "zt-shield-db"
-database_id = "a8e24772-e1eb-48d2-8f63-1781087a97b2"
-
-[[d1_databases]]
-binding = "SEC_CHECK_DB"
-database_name = "security-check"
-database_id = "b30506b8-d40c-45c7-afed-1371692f2cb6"
-
-[[d1_databases]]
-binding = "SOSS_DB"
-database_name = "vonbusch-soss"
-database_id = "20c8ca7a-80ae-4df6-88eb-41c14ca6ebd2"
-
-[[r2_buckets]]
-binding = "STORAGE"
-bucket_name = "vonbusch-crm-docs"
-
-[[r2_buckets]]
-binding = "ARCHIVE"
-bucket_name = "vonbusch-crm-archiv"
-
-[vars]
-APP_URL = "https://crm.vonbusch.app"
-
-[triggers]
-crons = ["*/15 * * * *", "0 2 * * *"]
+[[send_email]]
+name = "SEND_EMAIL"
