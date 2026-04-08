@@ -292,6 +292,9 @@ CRM-Ansicht: **Marketing → Lead Magneten → DMS Finder**
 
 ## CHANGELOG
 
+### v1.0.3 — 2026-04-08
+- Fix: Footer 1:1 wie ZT Shield — max-width, fbrand links, Datenschutz·Impressum·vonbusch.digital·Built with ♥ at Cloudflare rechts
+
 ### v1.0.2 — 2026-04-08
 - **Fix Admin:** `event.target` TypeError in `loadLeads()` beim automatischen Seitenstart — Filter-Tabs nutzen jetzt `data-status` Attribut für aktives Highlighting; Lead-Liste lädt korrekt beim Öffnen des Admin-Bereichs
 

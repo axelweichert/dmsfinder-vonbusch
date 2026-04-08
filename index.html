@@ -150,12 +150,8 @@ textarea{resize:vertical;min-height:96px}
 .proc-num{width:40px;height:40px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;font-family:var(--fh)}
 .proc-title{font-size:17px;font-weight:700;color:var(--wh);margin-bottom:6px;font-family:var(--fh)}
 .proc-text{font-size:13px;color:var(--tx2);line-height:1.7}
-footer{position:relative;z-index:1;border-top:1px solid var(--bd);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;background:var(--bg-mid)}
-.fbrand{font-size:13px;font-weight:600;color:var(--tx2);font-family:var(--fh)}
-.fbrand a{color:var(--ac);text-decoration:none}
-footer a{color:var(--tx3);text-decoration:none;font-size:12px;transition:color .2s}
-footer a:hover{color:var(--tx)}
-.footer-right{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+footer{position:relative;z-index:1;border-top:1px solid var(--bd);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:1100px;margin:0 auto;font-size:12px;color:var(--tx3)}
+.fbrand{font-family:var(--fh);font-weight:600;color:var(--tx2)}
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:translateY(0)}
 @media(max-width:900px){.bg-grid{grid-template-columns:1fr 1fr}.pc-grid{grid-template-columns:1fr}nav{padding:0 24px}.nav-links{display:none}.nav-mob-btn{display:block}.hero-in,.sw,.sw-alt .inner{padding:0 24px}footer{padding:24px}}
@@ -373,12 +369,8 @@ footer a:hover{color:var(--tx)}
 </section>
 
 <footer>
-  <div class="fbrand">von Busch GmbH &mdash; <a href="https://www.vonbusch.digital">vonbusch.digital</a></div>
-  <div class="footer-right">
-    <a href="https://www.vonbusch.digital/datenschutz">Datenschutz</a>
-    <a href="https://www.vonbusch.digital/impressum">Impressum</a>
-    <span style="color:var(--tx3);font-size:12px">Built with <span style="color:#e25555">&#x2665;</span> at <a href="https://cloudflare.com" style="color:var(--ac)" target="_blank">Cloudflare</a></span>
-  </div>
+  <div class="fbrand">von Busch GmbH &mdash; DocuWare &amp; JobRouter Experten</div>
+  <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap"><span><a href="https://www.vonbusch.digital/datenschutz" style="color:var(--tx3);text-decoration:none">Datenschutz</a> · <a href="https://www.vonbusch.digital/impressum" style="color:var(--tx3);text-decoration:none">Impressum</a> · <a href="https://vonbusch.digital" style="color:var(--tx3);text-decoration:none">vonbusch.digital</a></span><span style="display:flex;align-items:center;gap:6px;color:var(--tx3);font-size:12px">Built with <span style="color:#e25555;font-size:14px">♥</span> at <a href="https://cloudflare.com" target="_blank" style="color:var(--ac);text-decoration:none;font-weight:600">Cloudflare</a></span></div>
 </footer>
 
 <script>
