@@ -125,11 +125,11 @@ body{font-family:'NNG',system-ui,sans-serif;font-size:14px;color:var(--text);bac
     <div class="sidebar-head">
       <h2>Lead-Anfragen</h2>
       <div class="filter-tabs">
-        <button class="filter-tab active" onclick="loadLeads('')">Alle</button>
-        <button class="filter-tab" onclick="loadLeads('neu')">Neu</button>
-        <button class="filter-tab" onclick="loadLeads('bearbeitet')">Bearbeitet</button>
-        <button class="filter-tab" onclick="loadLeads('gewonnen')">Gewonnen</button>
-        <button class="filter-tab" onclick="loadLeads('verloren')">Verloren</button>
+        <button class="filter-tab active" data-status="" onclick="loadLeads('')">Alle</button>
+        <button class="filter-tab" data-status="neu" onclick="loadLeads('neu')">Neu</button>
+        <button class="filter-tab" data-status="bearbeitet" onclick="loadLeads('bearbeitet')">Bearbeitet</button>
+        <button class="filter-tab" data-status="gewonnen" onclick="loadLeads('gewonnen')">Gewonnen</button>
+        <button class="filter-tab" data-status="verloren" onclick="loadLeads('verloren')">Verloren</button>
       </div>
     </div>
     <div class="lead-list" id="leadList"><div class="empty-list">Wird geladen…</div></div>
@@ -176,8 +176,9 @@ async function api(path, opts = {}) {
 
 async function loadLeads(status) {
   currentStatus = status;
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
+  document.querySelectorAll('.filter-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.status === (status || ''));
+  });
 
   const url = '/api/admin/leads' + (status ? '?status=' + status : '');
   const data = await api(url);

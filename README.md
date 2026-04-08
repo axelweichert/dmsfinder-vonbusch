@@ -292,6 +292,9 @@ CRM-Ansicht: **Marketing → Lead Magneten → DMS Finder**
 
 ## CHANGELOG
 
+### v1.0.2 — 2026-04-08
+- **Fix Admin:** `event.target` TypeError in `loadLeads()` beim automatischen Seitenstart — Filter-Tabs nutzen jetzt `data-status` Attribut für aktives Highlighting; Lead-Liste lädt korrekt beim Öffnen des Admin-Bereichs
+
 ### v1.0.1 — 2026-04-08
 - Design-Übernahme von zt-shield.vonbusch.app
 - Akzentfarbe: Lila `#7B5EA7` (vorher Teal `#00C2A8`)
