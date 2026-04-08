@@ -292,6 +292,9 @@ CRM-Ansicht: **Marketing → Lead Magneten → DMS Finder**
 
 ## CHANGELOG
 
+### v1.0.4 — 2026-04-08
+- Fix: Light/Dark-Schalter entfernt — nur Dark Mode
+
 ### v1.0.3 — 2026-04-08
 - Fix: Footer 1:1 wie ZT Shield — max-width, fbrand links, Datenschutz·Impressum·vonbusch.digital·Built with ♥ at Cloudflare rechts
 
