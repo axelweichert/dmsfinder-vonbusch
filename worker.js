@@ -196,7 +196,7 @@ Digitalisierungs-Score: ${d.score_total ?? 0}/42 — ${scoreLabel}
 Nachricht:
 ${d.message ?? "–"}
 
-→ Admin: https://dmsfinder.vonbusch.app/admin`;
+→ Admin: https://dms-finder.vonbusch.app/admin`;
 
   const msg = createMimeMessage();
   msg.setSender({ name: "DMS Finder", addr: env.FROM_EMAIL });

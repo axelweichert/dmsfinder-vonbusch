@@ -180,14 +180,14 @@ D1 Dashboard → `dms-finder-db` → **Console** → Inhalt von `schema.sql` ein
 
 ## SCHRITT 6 — Custom Domain
 
-Workers & Pages → dms-finder → **Settings → Domains & Routes → Add Custom Domain** → `dmsfinder.vonbusch.app`
+Workers & Pages → dms-finder → **Settings → Domains & Routes → Add Custom Domain** → `dms-finder.vonbusch.app`
 
 ---
 
 ## SCHRITT 7 — Admin-Bereich mit Cloudflare Access absichern
 
 1. **Zero Trust → Access → Applications → Add → Self-hosted**
-2. Name: `DMS Finder Admin` · Domain: `dmsfinder.vonbusch.app` · Path: `/admin`
+2. Name: `DMS Finder Admin` · Domain: `dms-finder.vonbusch.app` · Path: `/admin`
 3. Policy: **Allow** · Selector: **Emails ending in** → `@vonbusch.digital`
 
 ---
@@ -222,9 +222,9 @@ CRM → **Marketing → DMS Finder** → Leads erscheinen automatisch nach Formu
 Nach jedem Push auf `main` deployt GitHub Actions automatisch.
 
 **Testen:**
-1. `https://dmsfinder.vonbusch.app` → Quiz durchspielen → Formular absenden
+1. `https://dms-finder.vonbusch.app` → Quiz durchspielen → Formular absenden
 2. D1 Console: `SELECT * FROM leads` → Lead vorhanden?
-3. `https://dmsfinder.vonbusch.app/admin` → Login mit `@vonbusch.digital` E-Mail
+3. `https://dms-finder.vonbusch.app/admin` → Login mit `@vonbusch.digital` E-Mail
 4. CRM → Marketing → DMS Finder → Lead erscheint mit Daten
 
 ---
@@ -247,7 +247,7 @@ Nach jedem Push auf `main` deployt GitHub Actions automatisch.
 
 ## Admin-Dashboard Funktionen
 
-1. `https://dmsfinder.vonbusch.app/admin` öffnen
+1. `https://dms-finder.vonbusch.app/admin` öffnen
 2. Leads nach Status filtern (Alle / Neu / Bearbeitet / Gewonnen / Verloren)
 3. Detail-Ansicht: Score, Quiz-Antworten, Kontakt, Unternehmen, Projektdetails
 4. Status und Notizen direkt bearbeiten
