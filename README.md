@@ -292,6 +292,10 @@ CRM-Ansicht: **Marketing → Lead Magneten → DMS Finder**
 
 ## CHANGELOG
 
+### v1.0.5 — 2026-04-09
+- Feature: Calendly-Integration — Henri Beckmann (30min), Lila-Akzentfarbe, vor Footer
+- Feature: Nav-Link „Termin" + CTA-Button → #termin wie ZT Shield
+
 ### v1.0.4 — 2026-04-08
 - Fix: Footer 1:1 wie ZT Shield — max-width, Datenschutz·Impressum·vonbusch.digital·Built with ♥ rechts
 - Fix: Light/Dark-Schalter entfernt — nur Dark Mode
