@@ -292,6 +292,9 @@ CRM-Ansicht: **Marketing → Lead Magneten → DMS Finder**
 
 ## CHANGELOG
 
+### v1.0.7 — 2026-04-09
+- Inhalt: Prozess-Sektion komplett ersetzt — 6 Schritte (1, 2, 2.5 Pilot, 3, 4, 5), vertikal, Pilot als Akzent-Highlight
+
 ### v1.0.6 — 2026-04-09
 - Fix: Calendly-Block zwischen #loesungen und #kontakt verschoben
 
