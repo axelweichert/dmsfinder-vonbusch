@@ -292,6 +292,9 @@ CRM-Ansicht: **Marketing → Lead Magneten → DMS Finder**
 
 ## CHANGELOG
 
+### v1.0.6 — 2026-04-09
+- Fix: Calendly-Block zwischen #loesungen und #kontakt verschoben
+
 ### v1.0.5 — 2026-04-09
 - Feature: Calendly-Integration — Henri Beckmann (30min), Lila-Akzentfarbe, vor Footer
 - Feature: Nav-Link „Termin" + CTA-Button → #termin wie ZT Shield
