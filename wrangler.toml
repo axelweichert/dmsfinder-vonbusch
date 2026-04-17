@@ -11,8 +11,8 @@ binding = "ASSETS"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "dms-finder-db"
-database_id = "518eeaa0-7f27-4bc8-a8bf-2f38ef6a9640"
+database_name = "dms-finder-db-eu"
+database_id = "c03ae94f-d319-45ce-a461-a85f25ea86a8"
 
 [[send_email]]
 name = "SEND_EMAIL"
