@@ -26,6 +26,18 @@ CREATE TABLE IF NOT EXISTS leads (
   q4_answer      TEXT,
   q5_answer      TEXT,
   q6_answer      TEXT,
+  -- UTM-Tracking
+  utm_source     TEXT,
+  utm_medium     TEXT,
+  utm_campaign   TEXT,
+  utm_term       TEXT,
+  utm_content    TEXT,
+  -- DSGVO
+  consent_at     TEXT,
+  -- DOI
+  doi_token      TEXT,
+  doi_confirmed_at TEXT,
+  doi_email_sent_at TEXT,
   -- Admin
   status         TEXT DEFAULT 'neu',
   notes          TEXT,

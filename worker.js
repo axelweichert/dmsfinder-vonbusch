@@ -1,5 +1,5 @@
 // worker.js — DMS Finder von Busch GmbH
-// Routes: POST /api/contact | GET+PATCH /api/admin/leads | GET /api/admin/export
+// Routes: POST /api/contact | GET /api/confirm | GET+PATCH /api/admin/leads | GET /api/admin/export
 
 import { EmailMessage } from "cloudflare:email";
 import { createMimeMessage } from "mimetext";
@@ -11,6 +11,9 @@ export default {
     // ── API Routes ───────────────────────────────────────────
     if (url.pathname === "/api/contact" && request.method === "POST") {
       return handleContact(request, env, ctx);
+    }
+    if (url.pathname === "/api/confirm" && request.method === "GET") {
+      return handleConfirm(request, env, ctx);
     }
     if (url.pathname === "/api/admin/leads" && request.method === "GET") {
       return handleAdminGet(request, env, url);
@@ -60,14 +63,37 @@ async function handleContact(request, env, ctx) {
     name, email, company, position, phone,
     employees, branche, current_system,
     dms_interest, budget, timeline, message,
-    score_total, q1_answer, q2_answer, q3_answer, q4_answer, q5_answer, q6_answer
+    score_total, q1_answer, q2_answer, q3_answer, q4_answer, q5_answer, q6_answer,
+    utm_source, utm_medium, utm_campaign, utm_term, utm_content,
+    consent,
+    website // honeypot
   } = body;
+
+  // Honeypot: bots fill this, humans don't
+  if (website) return cors('{"success":true}');
 
   if (!name || !email || !company) {
     return cors('{"error":"Pflichtfelder fehlen: name, email, company"}', 400);
   }
 
+  if (!consent) {
+    return cors('{"error":"Einwilligung zur Kontaktaufnahme erforderlich"}', 400);
+  }
+
   const now = new Date().toISOString();
+
+  // Rate limit: reject duplicate submission of same email within 5 minutes
+  try {
+    const cutoff = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const dup = await env.DB.prepare(
+      "SELECT id FROM leads WHERE email=? AND created_at>? LIMIT 1"
+    ).bind(email.toLowerCase(), cutoff).first();
+    if (dup) return cors('{"success":true}'); // silent dedup
+  } catch (_) { /* proceed if check fails */ }
+
+  const confirm_token = crypto.randomUUID();
+  const referrer = request.headers.get("Referer") || null;
+  const landing_page = new URL(request.url).origin + "/";
 
   try {
     await env.DB.prepare(`
@@ -75,16 +101,22 @@ async function handleContact(request, env, ctx) {
         (name,email,company,position,phone,employees,branche,current_system,
          dms_interest,budget,timeline,message,
          score_total,q1_answer,q2_answer,q3_answer,q4_answer,q5_answer,q6_answer,
+         utm_source,utm_medium,utm_campaign,utm_term,utm_content,
+         referrer,landing_page,consent_text_version,confirm_token,
          status,created_at)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'neu',?)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'v1',?,'doi_pending',?)
     `).bind(
-      name, email, company,
+      name, email.toLowerCase(), company,
       position ?? null, phone ?? null,
       employees ?? null, branche ?? null, current_system ?? null,
       dms_interest ?? null, budget ?? null, timeline ?? null, message ?? null,
       score_total ?? 0,
       q1_answer ?? null, q2_answer ?? null, q3_answer ?? null,
       q4_answer ?? null, q5_answer ?? null, q6_answer ?? null,
+      utm_source ?? null, utm_medium ?? null, utm_campaign ?? null,
+      utm_term ?? null, utm_content ?? null,
+      referrer, landing_page,
+      confirm_token,
       now
     ).run();
   } catch (e) {
@@ -92,15 +124,14 @@ async function handleContact(request, env, ctx) {
     return cors('{"error":"Datenbankfehler"}', 500);
   }
 
-  // E-Mails asynchron senden
-  ctx.waitUntil(Promise.allSettled([
-    env.RESEND_API_KEY
-      ? sendCustomerMail(env, { name, email, company, dms_interest, score_total }).catch(e => console.error("Customer mail:", e))
-      : Promise.resolve(),
-    env.SEND_EMAIL && env.FROM_EMAIL && env.NOTIFY_EMAIL
-      ? sendInternalMail(env, { name, email, company, position, phone, employees, branche, current_system, dms_interest, budget, timeline, message, score_total, now }).catch(e => console.error("Internal mail:", e))
-      : Promise.resolve()
-  ]));
+  // DOI-E-Mail senden
+  if (env.RESEND_API_KEY) {
+    const baseUrl = new URL(request.url).origin;
+    ctx.waitUntil(
+      sendDOIEmail(env, { name, email, confirm_token, baseUrl })
+        .catch(e => console.error("DOI mail:", e))
+    );
+  }
 
   return cors('{"success":true}');
 }
@@ -156,6 +187,95 @@ async function sendCustomerMail(env, d) {
       text
     })
   });
+}
+
+// ════════════════════════════════════════════════════════════
+// DOI-Bestätigungsmail (Phase 1: sofort nach Formular-Submit)
+// ════════════════════════════════════════════════════════════
+async function sendDOIEmail(env, { name, email, confirm_token, baseUrl }) {
+  const confirmUrl = `${baseUrl}/api/confirm?token=${confirm_token}`;
+  const text = [
+    `Hallo ${name},`,
+    ``,
+    `vielen Dank für Ihr Interesse an unseren DMS-Lösungen!`,
+    `Bitte bestätigen Sie Ihre E-Mail-Adresse, um Ihre Anfrage abzuschließen:`,
+    ``,
+    `${confirmUrl}`,
+    ``,
+    `Dieser Link ist 72 Stunden gültig.`,
+    ``,
+    `Falls Sie diese Anfrage nicht gestellt haben, können Sie diese E-Mail einfach ignorieren.`,
+    ``,
+    `Mit freundlichen Grüßen`,
+    `Ihr von Busch GmbH Team`,
+    ``,
+    `von Busch GmbH · dms@vonbusch.digital · www.vonbusch.digital`
+  ].join("\n");
+
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: "von Busch GmbH <noreply@vonbusch.app>",
+      to: [email],
+      subject: "Bitte E-Mail bestätigen — Ihre DMS-Anfrage bei von Busch",
+      text
+    })
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// GET /api/confirm?token=XXX — DOI-Bestätigung
+// ════════════════════════════════════════════════════════════
+async function handleConfirm(request, env, ctx) {
+  const url = new URL(request.url);
+  const token = url.searchParams.get("token");
+
+  if (!token) {
+    return new Response("Ungültiger Bestätigungslink.", { status: 400, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  }
+
+  let lead;
+  try {
+    lead = await env.DB.prepare(
+      "SELECT * FROM leads WHERE confirm_token=?"
+    ).bind(token).first();
+  } catch (e) {
+    console.error("Confirm DB error:", e);
+    return new Response("Fehler. Bitte erneut versuchen.", { status: 500 });
+  }
+
+  if (!lead) {
+    return new Response("Link ungültig oder bereits abgelaufen.", { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  }
+
+  if (lead.confirmed_at) {
+    return Response.redirect(new URL(request.url).origin + "/?confirmed=1", 302);
+  }
+
+  // Token max 72h gültig
+  if (Date.now() - new Date(lead.created_at).getTime() > 72 * 3600 * 1000) {
+    return new Response("Dieser Bestätigungslink ist abgelaufen. Bitte füllen Sie das Formular erneut aus.", { status: 410, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  }
+
+  const confirmedAt = new Date().toISOString();
+  await env.DB.prepare(
+    "UPDATE leads SET confirmed_at=?, status='neu', updated_at=? WHERE confirm_token=?"
+  ).bind(confirmedAt, confirmedAt, token).run();
+
+  ctx.waitUntil(Promise.allSettled([
+    env.RESEND_API_KEY
+      ? sendCustomerMail(env, { name: lead.name, email: lead.email, company: lead.company, dms_interest: lead.dms_interest, score_total: lead.score_total }).catch(e => console.error("Welcome mail:", e))
+      : Promise.resolve(),
+    env.SEND_EMAIL && env.FROM_EMAIL && env.NOTIFY_EMAIL
+      ? sendInternalMail(env, { ...lead, now: confirmedAt }).catch(e => console.error("Internal mail:", e))
+      : Promise.resolve()
+  ]));
+
+  return Response.redirect(new URL(request.url).origin + "/?confirmed=1", 302);
 }
 
 // ════════════════════════════════════════════════════════════
