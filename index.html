@@ -157,7 +157,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bd);padding:28px 4
 @media(max-width:900px){.bg-grid{grid-template-columns:1fr 1fr}.pc-grid{grid-template-columns:1fr}nav{padding:0 24px}.nav-links{display:none}.nav-mob-btn{display:block}.hero-in,.sw,.sw-alt .inner{padding:0 24px}footer{padding:24px}}
 @media(max-width:600px){.bg-grid,.int-grid{grid-template-columns:1fr}.form-row.c2{grid-template-columns:1fr}.hero-btns{flex-direction:column}.hero-stats{gap:24px}}
 </style>
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 </head>
 <body>
 
@@ -297,10 +296,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bd);padding:28px 4
       <p class="ss">Wähle einfach einen passenden Termin — direkt in deinen Kalender.</p>
     </div>
     <div class="reveal" style="overflow:hidden">
-      <div class="calendly-inline-widget"
-           data-url="https://calendly.com/henri-beckmann-vonbusch/30min?hide_gdpr_banner=1&background_color=0d0d0d&text_color=e8edf5&primary_color=7B5EA7"
-           style="min-width:320px;height:900px">
-      </div>
+      <div style="min-width:330px" class="meetergo-iframe"
+           data-src="https://cal.meetergo.com/henribeckmann/30-min-meeting-or-henri-beckmann"></div>
+      <script defer src="https://liv-showcase.s3.eu-central-1.amazonaws.com/browser-v4.js"></script>
     </div>
   </div>
 </section>
@@ -510,6 +508,5 @@ async function formSubmit(){
 var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');obs.unobserve(x.target);}});},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
 </script>
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 </body>
 </html>
