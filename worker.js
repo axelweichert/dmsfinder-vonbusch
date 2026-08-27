@@ -37,7 +37,15 @@ export default {
     }
 
     // ── Static Assets ────────────────────────────────────────
-    return env.ASSETS.fetch(request);
+    // HTML-Dokumente nicht am Edge cachen (verhinderte VON-1964 Live-Propagation).
+    const assetResp = await env.ASSETS.fetch(request);
+    const ct = assetResp.headers.get("content-type") || "";
+    if (ct.includes("text/html")) {
+      const h = new Headers(assetResp.headers);
+      h.set("Cache-Control", "no-store, must-revalidate");
+      return new Response(assetResp.body, { status: assetResp.status, headers: h });
+    }
+    return assetResp;
   }
 };
 
