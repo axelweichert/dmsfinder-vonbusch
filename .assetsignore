@@ -1,0 +1,18 @@
+# Nicht als oeffentliche Assets ausliefern (directory="." wuerde sonst das ganze Repo servieren).
+# Sicherheit: Quellcode, Git-Historie, Konfig mit account_id/database_id, DB-Schema nicht exponieren.
+.git/
+.wrangler/
+node_modules/
+.DS_Store
+.gitignore
+.assetsignore
+worker.js
+wrangler.toml
+tsconfig.json
+package.json
+package-lock.json
+README.md
+schema.sql
+migrate-phase1.sql
+# NNG-Schriften sind als base64 in index.html eingebettet; die .otf-Quelldateien werden zur Laufzeit nicht gebraucht.
+*.otf
