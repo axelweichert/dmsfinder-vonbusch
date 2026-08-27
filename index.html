@@ -33,7 +33,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:66px;padding:0 48px;d
 .eyebrow::before{content:'';width:6px;height:6px;background:var(--ac);border-radius:50%;animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hero h1{font-family:var(--fh);font-size:clamp(28px,4vw,54px);font-weight:800;line-height:1.12;letter-spacing:-.5px;color:var(--wh);text-transform:uppercase;margin-bottom:14px}
-.hl{background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hl,.kf--gradient-text{background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero-lead{font-size:17px;font-weight:400;color:var(--tx2);line-height:1.7;max-width:560px;margin:0 auto 22px}
 .hero-checks{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:28px}
 .hero-check{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--tx2)}
@@ -175,7 +175,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bd);padding:28px 4
   <div class="hero-in">
     <div class="reveal">
       <div class="eyebrow">Digitalisierungskonzept &amp; DMS-Installation</div>
-      <h1><span class="hl">Digitalisierung</span> f&uuml;r Ihr<br>Unternehmen &mdash; einfach gemacht</h1>
+      <h1><span class="hl kf--gradient-text">Digitalisierung</span> f&uuml;r Ihr<br>Unternehmen &mdash; einfach gemacht</h1>
       <p class="hero-lead">Transformieren Sie Ihre Gesch&auml;ftsprozesse mit ma&szlig;geschneiderten DocuWare- und JobRouter-L&ouml;sungen. Ihr zertifizierter DMS-Partner aus Bielefeld.</p>
       <div class="hero-checks">
         <span class="hero-check">Zertifizierter DocuWare Partner</span>
