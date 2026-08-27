@@ -89,17 +89,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:66px;padding:0 48px;d
 .bc{background:var(--card);border:1px solid var(--bd);border-radius:11px;padding:28px;backdrop-filter:blur(10px);transition:transform .2s,border-color .2s}
 .bc:hover{transform:translateY(-3px);border-color:var(--ac)}
 .bc-icon{width:44px;height:44px;border-radius:9px;background:rgba(255,255,255,.06);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;margin-bottom:16px}.bc-icon svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.bc-title{font-size:16px;font-weight:700;color:var(--wh);margin-bottom:8px;font-family:var(--fh)}
-.bc-text{font-size:13px;color:var(--tx2);line-height:1.65}
+.bc-title{font-size:var(--text-s);font-weight:700;color:var(--wh);margin-bottom:10px;font-family:var(--fh);line-height:1.2}
+.bc-text{font-size:var(--text-xs);color:var(--tx2);line-height:1.55}
 .pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:900px;margin:0 auto}
 .pc{background:var(--card);border:1.5px solid var(--bd);border-radius:12px;padding:36px;backdrop-filter:blur(10px);transition:transform .2s,border-color .2s}
 .pc:hover{transform:translateY(-3px);border-color:var(--ac)}
 .pc-logo{margin-bottom:16px}.pc-logo svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.pc-name{font-size:22px;font-weight:800;color:var(--wh);margin-bottom:10px;font-family:var(--fh);letter-spacing:-.2px}
-.pc-desc{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:20px}
-.pc-feat{list-style:none;display:flex;flex-direction:column;gap:8px}
-.pc-feat li{font-size:13px;color:var(--tx2);padding-left:18px;position:relative}
-.pc-feat li::before{content:'\2713';position:absolute;left:0;color:var(--ac);font-weight:700;font-size:12px}
+.pc-name{font-size:var(--text-s);font-weight:800;color:var(--wh);margin-bottom:12px;font-family:var(--fh);letter-spacing:-.2px;line-height:1.2}
+.pc-desc{font-size:var(--text-xs);color:var(--tx2);line-height:1.6;margin-bottom:22px}
+.pc-feat{list-style:none;display:flex;flex-direction:column;gap:12px}
+.pc-feat li{font-size:var(--text-xs);color:var(--tx2);padding-left:1.6em;position:relative;line-height:1.4}
+.pc-feat li::before{content:'\2713';position:absolute;left:0;top:.05em;color:var(--ac);font-weight:700;font-size:.9em}
 .form-wrap{background:var(--card);border:1px solid var(--bd);border-radius:14px;max-width:720px;margin:0 auto;padding:40px;backdrop-filter:blur(10px)}
 .form-steps{display:flex;align-items:center;justify-content:center;margin-bottom:36px}
 .form-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative}
@@ -140,8 +140,8 @@ textarea{resize:vertical;min-height:96px}
 .proc-step:last-child{padding-bottom:0}
 .proc-step:not(:last-child)::after{content:'';position:absolute;left:19px;top:40px;bottom:0;width:2px;background:linear-gradient(to bottom,rgba(175,72,255,.4),rgba(175,72,255,.05))}
 .proc-num{width:40px;height:40px;border-radius:50%;background:var(--ac);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0;font-family:var(--fh)}
-.proc-title{font-size:17px;font-weight:700;color:var(--wh);margin-bottom:6px;font-family:var(--fh)}
-.proc-text{font-size:13px;color:var(--tx2);line-height:1.7}
+.proc-title{font-size:var(--text-s);font-weight:700;color:var(--wh);margin-bottom:8px;font-family:var(--fh);line-height:1.2}
+.proc-text{font-size:var(--text-xs);color:var(--tx2);line-height:1.6}
 footer{position:relative;z-index:1;border-top:1px solid var(--bd);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;max-width:1100px;margin:0 auto;font-size:12px;color:var(--tx3)}
 .fbrand{font-family:var(--fh);font-weight:600;color:var(--tx2)}
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
@@ -387,7 +387,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bd);padding:28px 4
           <p class="proc-text">Entwurf der Soll-Prozesse, Automatisierungslogiken und Systemintegrationen. Fokus auf Struktur, nicht auf Software.</p>
         </div>
       </div>
-      <div class="proc-step" style="border-left:2px solid var(--ac);padding-left:20px;margin-left:-22px">
+      <div class="proc-step">
         <div class="proc-num" style="background:var(--ac);color:#fff">2.5</div>
         <div>
           <div class="proc-title" style="color:var(--ac)">Produktiver Pilot</div>
