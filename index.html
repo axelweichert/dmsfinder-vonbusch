@@ -157,6 +157,21 @@ footer{position:relative;z-index:1;border-top:1px solid var(--bd);padding:28px 4
   .glow,.glow-l,.glow-r{display:none!important}
 }
 </style>
+<style id="vb-mobile-global">
+/* VON-1978: globaler Responsive-/Mobile-Guard. nav ist position:fixed -> body overflow-x:hidden ist sicher (kein Sticky-Bruch). */
+html,body{max-width:100%;overflow-x:hidden}
+img,svg,video,canvas,iframe,table{max-width:100%}
+@media (max-width:680px){
+  img,svg,video,canvas,iframe{height:auto}
+  .glow,.glow-l,.glow-r{display:none!important}
+  h1,h2,h3,h4,.hero h1,.hero-title,.section-title{overflow-wrap:break-word;word-break:break-word;-webkit-hyphens:auto;hyphens:auto}
+  [class*="badge"],[class*="price"],[class*="pill"],[class*="chip"]{white-space:normal!important}
+  nav{flex-wrap:wrap;row-gap:8px}
+}
+@media (max-width:400px){
+  .sw,.inner,.hero-in,.hero-inner,.ci,.container,.wrap{padding-left:16px!important;padding-right:16px!important}
+}
+</style>
 </head>
 <body>
 
