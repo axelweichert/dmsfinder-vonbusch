@@ -444,7 +444,10 @@ async function handleExport(request, env) {
 function isAdminAuthorized(request, env) {
   if (request.headers.get("Cf-Access-Authenticated-User-Email")) return true;
   if (request.headers.get("Cf-Access-Jwt-Assertion")) return true;
-  const secret = request.headers.get("X-Admin-Secret");
-  if (env.ADMIN_SECRET && secret === env.ADMIN_SECRET) return true;
-  return true; // CF Access validiert bereits auf Netzwerkebene
+  if (env.ADMIN_SECRET) {
+    const url = new URL(request.url);
+    const secret = request.headers.get("X-Admin-Secret") || url.searchParams.get("s");
+    if (secret === env.ADMIN_SECRET) return true;
+  }
+  return false; // fail-closed: ohne CF-Access-Assertion oder gueltiges Secret kein Zugriff (VON-1999-Klasse)
 }

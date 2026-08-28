@@ -169,8 +169,20 @@ const QUIZ_LABELS = [
   'Unternehmensgröße'
 ];
 
+// Admin-Secret: Backstop-Auth unabhaengig von CF Access. Einmal abfragen, lokal merken.
+let SEC = localStorage.getItem('dmsf_admin_secret') || '';
+function ensureSecret(force) {
+  if (force || !SEC) {
+    const v = prompt('Admin-Secret eingeben:');
+    if (v) { SEC = v; localStorage.setItem('dmsf_admin_secret', SEC); }
+  }
+  return SEC;
+}
 async function api(path, opts = {}) {
-  const r = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...opts });
+  ensureSecret(false);
+  const mk = () => Object.assign({ 'Content-Type': 'application/json', 'X-Admin-Secret': SEC }, opts.headers || {});
+  let r = await fetch(path, { ...opts, headers: mk() });
+  if (r.status === 401) { ensureSecret(true); r = await fetch(path, { ...opts, headers: mk() }); }
   return r.json();
 }
 
@@ -349,7 +361,7 @@ async function convertLead(id) {
 }
 
 function exportCSV() {
-  window.location.href = '/api/admin/export';
+  window.location.href = '/api/admin/export?s=' + encodeURIComponent(ensureSecret(false) || '');
 }
 
 function esc(s) {
