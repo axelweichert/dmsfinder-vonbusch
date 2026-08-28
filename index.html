@@ -172,6 +172,7 @@ img,svg,video,canvas,iframe,table{max-width:100%}
   .sw,.inner,.hero-in,.hero-inner,.ci,.container,.wrap{padding-left:16px!important;padding-right:16px!important}
 }
 </style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -375,6 +376,7 @@ img,svg,video,canvas,iframe,table{max-width:100%}
         <input type="checkbox" id="f-consent" style="width:auto;margin-top:3px;flex-shrink:0">
         <label for="f-consent" style="font-size:13px;color:var(--tx2);text-transform:none;letter-spacing:0;cursor:pointer">Ich stimme zu, dass von Busch GmbH meine Angaben zur Bearbeitung meiner Anfrage verarbeitet und mich per E-Mail kontaktiert. <a href="https://www.vonbusch.digital/datenschutz" target="_blank" style="color:var(--ac)">Datenschutzhinweis</a>. <span class="req">*</span></label>
       </div>
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAESe0zTMa_TGCV_2" data-theme="dark" style="margin:16px 0 4px"></div>
       <div class="form-nav"><button class="btn-g" onclick="formBack(3)">&larr; Zur&uuml;ck</button><button class="btn-p" id="formSubmitBtn" onclick="formSubmit()">Anfrage absenden &#x2713;</button></div>
     </div>
     <div class="form-pane" id="form-pane-4">
@@ -516,7 +518,7 @@ async function formSubmit(){
   var btn=document.getElementById('formSubmitBtn');
   if(!document.getElementById('f-consent').checked){alert('Bitte stimmen Sie der Datenschutzerklärung zu.');return;}
   btn.textContent='Wird gesendet...';btn.disabled=true;
-  var p={name:document.getElementById('f-name').value.trim(),email:document.getElementById('f-email').value.trim(),company:document.getElementById('f-company').value.trim(),position:document.getElementById('f-position').value.trim()||null,phone:document.getElementById('f-phone').value.trim()||null,employees:document.getElementById('f-employees').value||null,branche:document.getElementById('f-branche').value||null,current_system:document.getElementById('f-current').value||null,dms_interest:fI,budget:document.getElementById('f-budget').value||null,timeline:document.getElementById('f-timeline').value||null,message:document.getElementById('f-message').value.trim()||null,score_total:qS,q1_answer:qA[0]?qA[0].x:null,q2_answer:qA[1]?qA[1].x:null,q3_answer:qA[2]?qA[2].x:null,q4_answer:qA[3]?qA[3].x:null,q5_answer:qA[4]?qA[4].x:null,q6_answer:qA[5]?qA[5].x:null,utm_source:_utm.source,utm_medium:_utm.medium,utm_campaign:_utm.campaign,utm_term:_utm.term,utm_content:_utm.content,consent:true,website:document.getElementById('f-website').value};
+  var p={name:document.getElementById('f-name').value.trim(),email:document.getElementById('f-email').value.trim(),company:document.getElementById('f-company').value.trim(),position:document.getElementById('f-position').value.trim()||null,phone:document.getElementById('f-phone').value.trim()||null,employees:document.getElementById('f-employees').value||null,branche:document.getElementById('f-branche').value||null,current_system:document.getElementById('f-current').value||null,dms_interest:fI,budget:document.getElementById('f-budget').value||null,timeline:document.getElementById('f-timeline').value||null,message:document.getElementById('f-message').value.trim()||null,score_total:qS,q1_answer:qA[0]?qA[0].x:null,q2_answer:qA[1]?qA[1].x:null,q3_answer:qA[2]?qA[2].x:null,q4_answer:qA[3]?qA[3].x:null,q5_answer:qA[4]?qA[4].x:null,q6_answer:qA[5]?qA[5].x:null,utm_source:_utm.source,utm_medium:_utm.medium,utm_campaign:_utm.campaign,utm_term:_utm.term,utm_content:_utm.content,consent:true,website:document.getElementById('f-website').value,turnstile_token:(window.turnstile&&window.turnstile.getResponse())||null};
   try{var r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});if(r.ok){setStep(4);}else{var err=await r.json();alert('Fehler: '+(err.error||'Unbekannt'));btn.textContent='Anfrage absenden ✓';btn.disabled=false;}}catch(e){alert('Verbindungsfehler. Bitte erneut versuchen.');btn.textContent='Anfrage absenden ✓';btn.disabled=false;}
 }
 

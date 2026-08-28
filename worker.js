@@ -55,9 +55,27 @@ function cors(body, status = 200) {
 // ════════════════════════════════════════════════════════════
 // POST /api/contact — Lead speichern + E-Mails senden
 // ════════════════════════════════════════════════════════════
+async function verifyTurnstile(env, token, ip) {
+  if (!env.TURNSTILE_SECRET) return false; // fail-closed: kein Secret -> keine ungeprueften Leads
+  if (!token) return false;
+  try {
+    const form = new FormData();
+    form.append("secret", env.TURNSTILE_SECRET);
+    form.append("response", token);
+    if (ip) form.append("remoteip", ip);
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: form });
+    const d = await r.json();
+    return d.success === true;
+  } catch { return false; }
+}
+
 async function handleContact(request, env, ctx) {
   let body;
   try { body = await request.json(); } catch { return cors('{"error":"Invalid JSON"}', 400); }
+
+  // Bot-Schutz: Cloudflare Turnstile (fail-closed) — VON-1727 Fast-Follow
+  const tsOk = await verifyTurnstile(env, body.turnstile_token, request.headers.get("CF-Connecting-IP"));
+  if (!tsOk) return cors('{"error":"Sicherheitscheck fehlgeschlagen. Bitte Seite neu laden."}', 400);
 
   const {
     name, email, company, position, phone,
