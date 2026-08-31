@@ -1,4 +1,6 @@
-User-agent: *
-Allow: /
+# Die Content-Policy (Content-Signal: search=yes, ai-input=yes, ai-train=no,
+# use=reference + AI-Crawler-Sperrliste) liefert das Zone-Snippet
+# "robots_policy" (VON-2023) und stellt sie diesem Block voran.
+# Hier deshalb nur die Sitemap-Referenz — keine eigene User-agent-Gruppe.
 
-Sitemap: https://dmsfinder.vonbusch.app/sitemap.xml
+Sitemap: https://dms-finder.vonbusch.app/sitemap.xml
