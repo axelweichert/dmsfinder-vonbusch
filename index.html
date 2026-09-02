@@ -29,13 +29,13 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:62.5%}
 body{background:var(--bg);color:var(--tx);font-family:var(--fb);font-size:var(--text-s);line-height:1.7;overflow-x:hidden;transition:background .3s,color .3s}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:66px;padding:0 48px;display:flex;align-items:center;justify-content:space-between;background:var(--nav-bg);border-bottom:1px solid var(--bd);backdrop-filter:blur(12px);transition:background .3s}
-.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:66px;padding:0 48px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:var(--nav-bg);border-bottom:1px solid var(--bd);backdrop-filter:blur(12px);transition:background .3s}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;justify-self:start}
 .nav-logo-img{height:28px;width:auto;display:block;filter:var(--logo-filter);transition:filter .3s}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-cta{background:var(--btn);color:var(--btn-tx);padding:9px 22px;border-radius:999px;font-family:var(--fh);font-weight:700;font-size:13px;text-decoration:none;letter-spacing:.2px;transition:background .2s,transform .15s;border:none;cursor:pointer;white-space:nowrap}
+.nav-right{display:flex;align-items:stretch;gap:12px;justify-self:center}
+.nav-cta{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:38px;line-height:1;background:var(--btn);color:var(--btn-tx);padding:0 22px;border-radius:999px;font-family:var(--fh);font-weight:700;font-size:13px;text-decoration:none;letter-spacing:.2px;transition:background .2s,transform .15s;border:none;cursor:pointer;white-space:nowrap}
 .nav-cta:hover{background:var(--btn-h);transform:translateY(-1px)}
-@media(max-width:560px){nav{padding:0 16px}.nav-right{gap:8px}.nav-cta{padding:8px 14px;font-size:12px}.nav-logo-img{height:24px}}
+@media(max-width:560px){nav{padding:0 16px}.nav-right{gap:8px}.nav-cta{padding:0 14px;min-height:34px;font-size:12px}.nav-logo-img{height:24px}}
 .hero{position:relative;z-index:1;padding:130px 0 60px;overflow:hidden}
 .glow-r{position:absolute;top:-80px;right:-160px;width:640px;height:640px;background:radial-gradient(circle,rgba(175,72,255,.12) 0%,transparent 65%);pointer-events:none}
 .glow-l{position:absolute;bottom:-120px;left:-80px;width:440px;height:440px;background:radial-gradient(circle,rgba(175,72,255,.06) 0%,transparent 70%);pointer-events:none}
